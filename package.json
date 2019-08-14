@@ -9,10 +9,8 @@
   "author": "Michael Cao",
   "license": "ISC",
   "dependencies": {
-    "@slack/events-api": "^2.2.0",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
-    "messaging-api-slack": "^0.7.11",
     "slackbots": "^1.2.0"
   }
 }
