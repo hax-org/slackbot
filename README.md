@@ -10,9 +10,11 @@
 
 ## Configuration
 
-Create a file in the root directory named `config.json`, populated with the Slack token as follows:
+Create a file in the root directory named `config.json`, populated with the Slack token, app name, and port as follows:
 
 ```{
-  "user_token": "user_token_here"
+  "user_token": "user_token_here",
+  "bot_name": "name of your Slack app",
+  "port": "port for the express middleware to run on"
 }
 ```

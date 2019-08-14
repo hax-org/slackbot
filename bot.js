@@ -1,20 +1,20 @@
 // requirements
+const config = require('./config.json');
 const slackBot = require('slackbots');
-const Message = require('./typings/Message').default;
-const Collection = require('collection');
+const Collection = require('collection'); // from discord.js - see package.json
 const readdir = require('fs').readdir;
 
 const bot = new slackBot({
-  token: require('./config.json').user_token,
-  name: 'HAXBot'
+  token: config.user_token,
+  name: config.bot_name
 });
 bot.commands = new Collection();
 bot.events = new Collection();
 
 const server = require('http').createServer((req, res) => {
-  res.end('HAXBot');
+  res.end(config.bot_name);
 });
-server.listen(process.env.PORT || 5000);
+server.listen(config.port || 5000); // for future buttons and slash commands
 
 readdir('./events/', (err, files) => {
   if (err) throw err;
