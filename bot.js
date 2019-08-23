@@ -19,6 +19,8 @@ class HAXBot extends slackBot {
     this.events = new Collection();
     this.logger = require('./utils/Logger');
     this.config = config;
+    this.connected = false;
+    this.interval = null;
 
     this.loadCommand = (commandPath, commandName) => {
       try {
@@ -95,3 +97,18 @@ const init = async () => {
 };
 
 init();
+
+bot.on('close', () => {
+  bot.logger.debug('Disconnected...');
+  bot.connected = false;
+  bot.interval = setInterval(() => {
+    if (bot.connected) {
+      bot.logger.debug('Reconnected!');
+      clearInterval(bot.interval);
+      bot.interval = null;
+    } else {
+      bot.logger.debug('Reconnecting...');
+      bot.login();
+    }
+  }, 10000);
+});

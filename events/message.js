@@ -6,17 +6,18 @@ module.exports = class {
   }
 
   async run(bot, data) {
+    if (data.type == 'error' && data.error.msg == 'invalid message type: null')
+      return;
     if (
       data.subtype == 'bot_message' || // excludes bot messages
       data.type !== 'message' // excludes non-messages
     ) {
+      // console.log(data);
       return;
     }
 
     let channels = (await bot.getChannels()).channels;
-    let users = (await bot.getUsers()).members;
     let channel;
-    let user;
 
     for (var i = 0; i < channels.length; i++) {
       if (data.channel == channels[i].id) {
@@ -31,7 +32,19 @@ module.exports = class {
           channel = groups[i];
         }
       }
+
+      if (!channel) {
+        let dms = (await bot.getImChannels()).ims;
+        for (i = 0; i < dms.length; i++) {
+          if (data.channel == dms[i].id) {
+            channel = dms[i];
+          }
+        }
+      }
     }
+
+    let users = (await bot.getUsers()).members;
+    let user;
 
     for (var j = 0; j < users.length; j++) {
       if (data.user == users[j].id) {
@@ -39,8 +52,12 @@ module.exports = class {
       }
     }
 
+    if (!user) return;
+
     bot.logger.log(
-      `${channel ? channel.name : data.channel} | ${user.name} -> ${data.text}`
+      `${channel ? channel.name : data.channel} | ${
+        user ? user.name : 'unknown'
+      } -> ${data.text}`
     );
 
     let msg = new Message(bot, data, user, channel, data.text);

@@ -8,5 +8,6 @@ module.exports = class {
     bot.id = await bot.getUserId(bot.name.toLowerCase());
 
     bot.logger.ready(`${bot.name} (${bot.id}) is now alive!`);
+    bot.connected = true;
   }
 };
